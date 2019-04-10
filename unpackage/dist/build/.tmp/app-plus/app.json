@@ -1,0 +1,83 @@
+{
+  "pages": [
+    "pages/judge/judge",
+    "pages/index/guide",
+    "pages/tabBar/index/index",
+    "pages/tabBar/love/love",
+    "pages/login/login",
+    "pages/register/register",
+    "pages/love/release/release",
+    "pages/tabBar/beauty/beauty",
+    "pages/info/datum/datum",
+    "pages/info/index/index",
+    "pages/tabBar/social/social",
+    "pages/forget/forget",
+    "pages/tcp/tcp",
+    "pages/info/crop/crop",
+    "pages/info/name/name",
+    "pages/info/change/change",
+    "pages/info/history/history",
+    "pages/info/notice/notice",
+    "pages/info/release/release",
+    "pages/info/review/review",
+    "pages/info/set/set",
+    "pages/info/suggest/suggest",
+    "pages/info/version/version",
+    "pages/tabBar/index/detail/detail",
+    "pages/social/province/index/index",
+    "pages/social/province/search/search",
+    "pages/social/province/detail/detail",
+    "pages/social/nation/index/index",
+    "pages/social/nation/detail/detail",
+    "pages/social/nation/search/search",
+    "pages/love/reply/reply",
+    "pages/beauty/pic/pic",
+    "pages/beauty/video/video"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#3e5ffb",
+    "backgroundColor": "#F8F8F8"
+  },
+  "usingComponents": {},
+  "tabBar": {
+    "color": "#fff",
+    "selectedColor": "#fff",
+    "borderStyle": "black",
+    "backgroundColor": "#395af6",
+    "list": [
+      {
+        "pagePath": "pages/tabBar/index/index",
+        "iconPath": "static/index-tab.png",
+        "selectedIconPath": "static/index-tab-active.png",
+        "text": "每日江夏"
+      },
+      {
+        "pagePath": "pages/tabBar/social/social",
+        "iconPath": "static/social-tab.png",
+        "selectedIconPath": "static/social-tab-active.png",
+        "text": "社会热点"
+      },
+      {
+        "pagePath": "pages/tabBar/beauty/beauty",
+        "iconPath": "static/beauty-tab.png",
+        "selectedIconPath": "static/beauty-tab-active.png",
+        "text": "美丽江夏"
+      },
+      {
+        "pagePath": "pages/tabBar/love/love",
+        "iconPath": "static/love-tab.png",
+        "selectedIconPath": "static/love-tab-active.png",
+        "text": "我爱江夏"
+      }
+    ]
+  },
+  "splashscreen": {
+    "alwaysShowBeforeRender": true,
+    "autoclose": false
+  },
+  "appname": "jiangxia daily",
+  "compilerVersion": "1.8.2"
+}

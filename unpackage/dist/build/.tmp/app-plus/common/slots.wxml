@@ -1,0 +1,6 @@
+<import src="/components/swiper/swiper.vue.wxml" />
+<import src="/components/uni-load-more.vue.wxml" />
+<import src="/components/mpvue-picker/mpvuePicker.vue.wxml" />
+<import src="/components/mpvue-citypicker/mpvueCityPicker.vue.wxml" />
+<import src="/components/uni-icon.vue.wxml" />
+

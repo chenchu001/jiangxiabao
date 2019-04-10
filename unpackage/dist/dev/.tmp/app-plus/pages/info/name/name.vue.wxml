@@ -1,0 +1,1 @@
+<template name="54e8eba9"><view class="_view 54e8eba9 name"><input class="_input 54e8eba9 input" focus type="text" value="{{nameValue}}" bindinput="handleProxy" data-eventid="{{'54e8eba9-0'}}" data-comkey="{{$k}}" /><text class="_text 54e8eba9 hint">好名字可以让你的朋友更容易记住你</text></view></template>

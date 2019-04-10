@@ -1,0 +1,2 @@
+<import src="./social.vue.wxml" />
+    <template is="7d2b3839" data="{{ ...$root['0'], $root }}"/>

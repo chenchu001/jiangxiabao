@@ -1,0 +1,22 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "每日江夏",
+  "bounce": "none",
+  "titleNView": {
+    "buttons": [
+      {
+        "text": "",
+        "fontSrc": "/static/iconfont.ttf",
+        "fontSize": "22px",
+        "color": "#fff"
+      },
+      {
+        "text": "",
+        "fontSrc": "/static/iconfont.ttf",
+        "fontSize": "22px",
+        "color": "#fff",
+        "float": "left"
+      }
+    ]
+  }
+}

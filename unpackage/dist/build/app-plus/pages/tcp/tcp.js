@@ -1,0 +1,2 @@
+setCssToHead(["@charset \x22UTF-8\x22;\nwx-page.",[1],"pages-tcp-tcp wx-uni-page-body { background: #fff; height: 100%; }\n.",[1],"tcp { width: 100%; height: 100%; padding: ",[0,30]," ",[0,40],"; -webkit-box-sizing: border-box; box-sizing: border-box; }\n.",[1],"tcp wx-text { font-size: ",[0,32],"; display: block; text-align: justify; }\n",],undefined,{path:"./pages/tcp/tcp.wxss"})();
+document.dispatchEvent(new CustomEvent("generateFuncReady", { detail: { generateFunc: $gwx('./pages/tcp/tcp.wxml') } }));

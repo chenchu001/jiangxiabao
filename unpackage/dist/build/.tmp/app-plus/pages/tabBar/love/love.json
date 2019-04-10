@@ -1,0 +1,25 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "我爱江夏",
+  "enablePullDownRefresh": true,
+  "bounce": "none",
+  "titleNView": {
+    "buttons": [
+      {
+        "text": "",
+        "color": "#fff",
+        "type": "none",
+        "fontSrc": "/static/iconfont.ttf",
+        "fontSize": "22px",
+        "width": "auto"
+      },
+      {
+        "text": "",
+        "fontSrc": "/static/iconfont.ttf",
+        "fontSize": "22px",
+        "color": "#fff",
+        "float": "left"
+      }
+    ]
+  }
+}

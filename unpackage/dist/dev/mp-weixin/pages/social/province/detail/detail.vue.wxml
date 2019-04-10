@@ -1,0 +1,1 @@
+<template name="9eb50312"><view class="_view 9eb50312 detail" wx:if="{{loading}}"><view class="_view 9eb50312 title">{{detailList.title}}</view><view class="_view 9eb50312 content"><rich-text nodes="{{detailList.content}}" class="_rich-text 9eb50312 richText"></rich-text></view></view></template>

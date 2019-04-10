@@ -1,0 +1,1 @@
+<template name="3aebceda"><view class="_view 3aebceda suggest"><textarea class="_textarea 3aebceda suggest-val" value="{{suggestVal}}" bindinput="handleProxy" placeholder="请您留下对我们的宝贵意见" data-eventid="{{'3aebceda-0'}}" data-comkey="{{$k}}" /><view class="_view 3aebceda suggest-btn">提交</view></view></template>

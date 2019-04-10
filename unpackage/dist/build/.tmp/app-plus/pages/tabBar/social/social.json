@@ -1,0 +1,23 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "社会热点",
+  "bounce": "none",
+  "titleNView": {
+    "buttons": [
+      {
+        "text": "",
+        "fontSrc": "/static/iconfont.ttf",
+        "fontSize": "22px",
+        "color": "#fff"
+      },
+      {
+        "text": "",
+        "fontSrc": "/static/iconfont.ttf",
+        "fontSize": "22px",
+        "float": "left",
+        "color": "#fff",
+        "onclick": "javascript:plus.webview.create"
+      }
+    ]
+  }
+}

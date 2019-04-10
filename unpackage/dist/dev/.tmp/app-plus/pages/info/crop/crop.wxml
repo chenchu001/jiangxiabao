@@ -1,0 +1,2 @@
+<import src="./crop.vue.wxml" />
+    <template is="587926c9" data="{{ ...$root['0'], $root }}"/>
