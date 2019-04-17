@@ -1,1 +1,4 @@
+<import src="/components/swiper/swiper.vue.wxml" />
+<import src="/components/lazy-image.vue.wxml" />
+<import src="/components/uni-load-more.vue.wxml" />
 
