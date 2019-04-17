@@ -1,6 +1,7 @@
 {
   "usingComponents": {},
   "navigationBarTitleText": "社会热点",
+  "enablePullDownRefresh": true,
   "bounce": "none",
   "titleNView": {
     "buttons": [

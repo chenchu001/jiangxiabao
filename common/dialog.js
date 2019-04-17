@@ -31,7 +31,7 @@ export const config = {
 }
 
 // 分享到微信
-export function shareWeiXin(url, title, summary, imageUrl, callback) {
+export function shareWeiXin(url, title, summary, imageUrl) {
 	uni.share({
 		provider: "weixin",
 		scene: "WXSceneSession",
@@ -42,7 +42,7 @@ export function shareWeiXin(url, title, summary, imageUrl, callback) {
 		imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
 		success: function(res) {
 			console.log("success:" + JSON.stringify(res));
-			callback(res)
+			// callback(res)
 		},
 		fail: function(err) {
 			console.log("fail:" + JSON.stringify(err));
@@ -51,7 +51,7 @@ export function shareWeiXin(url, title, summary, imageUrl, callback) {
 }
 
 // 分享到朋友圈
-export function shareFriend(url, title, summary, imageUrl, callback) {
+export function shareFriend(url, title, summary, imageUrl) {
 	uni.share({
 		provider: "weixin",
 		scene: "WXSenceTimeline",
@@ -62,7 +62,7 @@ export function shareFriend(url, title, summary, imageUrl, callback) {
 		imageUrl: imageUrl,
 		success: function(res) {
 			console.log("success:" + JSON.stringify(res));
-			callback(res)
+			// callback(res)
 		},
 		fail: function(err) {
 			console.log("fail:" + JSON.stringify(err));

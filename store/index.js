@@ -9,14 +9,12 @@ const store = new Vuex.Store({
 		replyInfo: "",
 		headimgurl: "",
 		nickname: "",
-		isPublish: false
+		isPublish: false,
+		isName: false,
     },
     mutations: {
-		saveHeadimgurl (state, url) {
-			state.headimgurl = url
-		},
-		saveNickname (state, name) {
-			state.nickname = name
+		changeName (state, status) {
+			state.isName = status
 		},
         changeReply (state, id) {
 			state.replyId = id

@@ -110,6 +110,7 @@ page {
             width: 110rpx;
             height: 110rpx;
             border-radius: 50%;
+            margin-right: 10rpx;
 }
 .love .content .item .list .title .text {
             font-size: 28rpx;

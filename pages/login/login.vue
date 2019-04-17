@@ -66,7 +66,6 @@
 					},
 					success: (res) => {
 						let ret = res.data
-						console.log(ret)
 						if (ret.rescode == "0000") {
 							uni.setStorageSync("memberid", ret.data.memberid)
 							uni.setStorageSync("nickname", ret.data.nickname)

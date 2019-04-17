@@ -66,9 +66,14 @@ page {
 .uni-media-list {
   padding: 22rpx 0;
 }
-.uni-media-list-logo {
-  width: 240rpx;
-  height: 160rpx;
+.uni-media-list-logo, .lazy-image {
+  width: 240rpx !important;
+  height: 160rpx !important;
+  -webkit-box-flex: 0 !important;
+  -webkit-flex: 0 0 240rpx !important;
+      -ms-flex: 0 0 240rpx !important;
+          flex: 0 0 240rpx !important;
+  margin-right: 20rpx;
 }
 .uni-media-list-body {
   height: auto;

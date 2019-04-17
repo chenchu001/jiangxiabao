@@ -266,7 +266,7 @@
 						height: canvasH,
 						destWidth: canvasW,
 						destHeight: canvasH,
-						quality: .5,
+						quality: .2,
 						canvasId: 'myCanvas',
 						success: function (res) {
 							uni.showLoading({
@@ -317,9 +317,9 @@
 								"content-type": "application/x-www-form-urlencoded" 
 							},
 							success: res => {
-								console.log(res)
 								uni.hideLoading()
 								uni.setStorageSync("headimgurl", this.headimgurl)
+								this.$store.commit('changeName', true)
 								uni.navigateBack({
 									delta: 2,
 									url: '../index/index'

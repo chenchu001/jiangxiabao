@@ -22,6 +22,7 @@
 		    "path" : "pages/tabBar/index/index",
 		    "style" : {
 		        "navigationBarTitleText" : "每日江夏",
+				"enablePullDownRefresh": true,
 		        "app-plus" : {
 		            "bounce" : "none",
 		            "titleNView" : {
@@ -109,16 +110,17 @@
             "path" : "pages/tabBar/beauty/beauty",
             "style" : {
                 "navigationBarTitleText" : "美丽江夏",
+				"enablePullDownRefresh": true,
                 "app-plus" : {
                     "bounce" : "none",
                     "titleNView" : {
                         "buttons" : [
-                            {
-                                "text" : "全部",
-                                "fontSize" : "14",
-                                "select" : true,
-                                "width" : "auto"
-                            },
+							{
+							    "text" : "\ue626",
+							    "fontSrc" : "/static/iconfont.ttf",
+							    "fontSize" : "22px",
+							    "color" : "#fff"
+							},
                             {
                                 "text" : "\ue607",
                                 "fontSrc" : "/static/iconfont.ttf",
@@ -147,6 +149,7 @@
             "path" : "pages/tabBar/social/social",
             "style" : {
                 "navigationBarTitleText" : "社会热点",
+				"enablePullDownRefresh": true,
                 "app-plus" : {
                     "bounce" : "none",
                     "titleNView" : {

@@ -23,7 +23,8 @@
 			<view class="uni-list">
 				<view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(item,index) in listData" :key="index" @tap="openDetail" :data-id="item.id">
 					<view class="uni-media-list">
-						<image class="uni-media-list-logo" lazy-load :src="item.pic"></image>
+						<!-- <image class="uni-media-list-logo" lazy-load :src="item.pic"></image> -->
+						<lazy-image class="uni-media-list-logo" v-if="item.pic" :realSrc="item.pic" :placeholdSrc="placeholderSrc"></lazy-image>
 						<view class="uni-media-list-body">
 							<view class="uni-media-list-text-top">{{item.title}}</view>
 							<view class="time">{{item.createtime}}</view>
@@ -40,14 +41,16 @@
 <script>
 	import uSwiper from '../../../components/swiper/swiper.vue'
 	import uniLoadMore from '../../../components/uni-load-more.vue'
+	import lazyImage from "../../../components/lazy-image.vue"
 	import {Toast, sucToast, checkphone, config} from '../../../common/dialog.js'
 
 	export default {
 		components: {
-			uSwiper,uniLoadMore
+			uSwiper,uniLoadMore,lazyImage
 		},
 		data() {
 			return {
+				placeholderSrc: "../../../static/defaultImg.jpg",
 				headerText: "每日江夏",
 				loadingType: 1,
 				loadingFlag: false,
@@ -130,6 +133,7 @@
 						uni.hideLoading()
 						this.loading = true
 						if (res.statusCode == 200) {
+							uni.stopPullDownRefresh()
 							res = res.data
 							this.total = Number(res.total)
 							this.listData = res.data
@@ -145,6 +149,7 @@
 				})
 			}
 		},
+		// 上拉加载
 		onReachBottom() {
 			if (this.loadingType == 2) {
 				return
@@ -169,6 +174,15 @@
 		    } else {
 		        this.loadingType = 2
 		    }
+		},
+		// 下拉刷新
+		onPullDownRefresh() {
+			this.listData = []
+			this.msg = []
+			this.imgUrls = []
+			this._getList()
+			this._getNotice()
+			this._getBanner()
 		},
 		onLoad () {
 			uni.showLoading({
@@ -204,9 +218,15 @@
 	.uni-list-cell::after {
 		right: 30upx;
 	}
-	.uni-media-list-logo {
-		width: 240upx;
-		height: 160upx;
+	.uni-media-list-logo, .lazy-image {
+		width: 240upx !important;
+		height: 160upx !important;
+		flex: 0 0 240upx !important;
+		margin-right: 20upx;
+	}
+	.uni-media-list-logo image {
+		width: 100%;
+		height: 100%;
 	}
 	.uni-media-list-body {
 		height: auto;
@@ -271,7 +291,9 @@
 			padding-bottom: 0upx;
 			box-sizing: border-box;
 			.uni-list {
-				
+				.uni-media-list-logo {
+					flex: 0 0 240upx;
+				}
 			}
 		}
 	}

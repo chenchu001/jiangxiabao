@@ -13,7 +13,8 @@
 						<!-- 图片展示 -->
 						<view class="pic-wrap" v-if="item.artpics">
 							<view class="pic" v-for="(list, key) in item.artpics" :key="key">
-								<image :src="list" mode="aspectFill" @tap="previewImage(item.artpics, key)"></image>
+								<!-- <image lazy-load=!loading @load="onLoadImg" :src="list" mode="aspectFill" @tap="previewImage(item.artpics, key)"></image> -->
+								<lazy-image mode="aspectFill" :realSrc="list" :placeholdSrc="placeholderSrc" @handleImageClick="previewImage(item.artpics, key)"></lazy-image>
 							</view>
 						</view>
 					</view>
@@ -35,9 +36,14 @@
 						<!-- 点赞 -->
 						<view class="like-wrap" v-if="item.prise.length">
 							<image src="../../../static/love-icon5.png" mode=""></image>
-							<text v-for="(list, key) in item.prise" :key="key">
+							<text v-if="item.prise.length > 1" v-for="(list, key) in item.prise" :key="key">
+								<text>{{list.nickname}}</text>
+								<text v-if="!item.prise.length == key">,</text>
+							</text>
+							<text v-if="item.prise.length == 1" v-for="(list, key) in item.prise" :key="key">
 								<text>{{list.nickname}}</text>
 							</text>
+							<!-- <text>{{item.prise[item.prise.length-1].nickname}}</text> -->
 						</view>
 						<!-- 回复 -->
 						<view class="review-wrap" v-if="item.comments.length">
@@ -56,14 +62,17 @@
 
 <script>
 	import uniLoadMore from '../../../components/uni-load-more.vue'
+	import lazyImage from "../../../components/lazy-image.vue"
 	import {Toast, sucToast, checkphone, config} from '../../../common/dialog.js'
 	
 	export default {
 		components: {
+			lazyImage,
 			uniLoadMore
 		},
 		data() {
 			return {
+				placeholderSrc: "../../../static/defaultImg.jpg",
 				loading: false,
 				loveList: [],
 				imgArr: [],
@@ -71,7 +80,7 @@
 				total: 0,
 				size: 10,
 				loadingType: 1,
-				loadingFlag: true,
+				loadingFlag: false,
 				contentText: {
 					contentdown: "上拉显示更多",
 					contentrefresh: "正在加载...",
@@ -82,6 +91,7 @@
 		methods: {
 			// 预览图片
 			previewImage(imageList, image_index) {
+				console.log(imageList, image_index)
 				var current = imageList[image_index]
 				uni.previewImage({
 					current: current,
@@ -120,7 +130,7 @@
 											this.loveList[i].hasfav = 0
 											this.loveList[i].prizenum--
 											for (let j=0;j<this.loveList[i].prise.length;j++) {
-												if (this.loveList[i].nickname === this.loveList[i].prise[j].nickname) {
+												if (uni.getStorageSync("nickname") === this.loveList[i].prise[j].nickname) {
 													this.loveList[i].prise.splice(j, 1)
 												}
 											}
@@ -155,6 +165,7 @@
 						uni.hideLoading()
 						uni.stopPullDownRefresh()
 						this.loading = true
+						this.loadingFlag = true
 						res = res.data
 						this.total = Number(res.total)
 						this.loveList = res.data
@@ -216,12 +227,28 @@
 			}
 		},
 		onShow (options) {
+			// 修改名字之后首次进入
+			if (this.$store.state.isName) {
+				this.loveList = []
+				this.total = 0
+				this.num = 1
+				this.loadingFlag = false
+				this.loadingType = 1
+				uni.showLoading({
+					title: "加载中"
+				})
+				this._getLoveList()
+			}
 			// 发表动态
 			if (this.$store.state.isPublish) {
 				this.loveList = []
 				this.total = 0
 				this.num = 1
+				this.loadingFlag = false
 				this.loadingType = 1
+				uni.showLoading({
+					title: "加载中"
+				})
 				this._getLoveList()
 			}
 			// 提交评论
@@ -241,6 +268,7 @@
 		onHide () {
 			this.$store.commit('clearReply')
 			this.$store.commit('clearPublish', false)
+			this.$store.commit('changeName', false)
 		},
 		onLoad (options) {
 			uni.showLoading({

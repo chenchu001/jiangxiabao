@@ -10,7 +10,8 @@
 			<view class="uni-list">
 				<view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(item,index) in listData" :key="index" @tap="openDetail" :data-id="item.id">
 					<view class="uni-media-list">
-						<image class="uni-media-list-logo" lazy-load :src="item.pic"></image>
+						<!-- <image class="uni-media-list-logo" lazy-load :src="item.pic"></image> -->
+						<lazy-image class="uni-media-list-logo" v-if="item.pic" :realSrc="item.pic" :placeholdSrc="placeholderSrc"></lazy-image>
 						<view class="uni-media-list-body">
 							<view class="uni-media-list-text-top">{{item.title}}</view>
 							<view class="time">{{item.createtime}}</view>
@@ -27,14 +28,16 @@
 <script>
 	import uSwiper from '../../../../components/swiper/swiper.vue'
 	import uniLoadMore from '../../../../components/uni-load-more.vue'
+	import lazyImage from "../../../../components/lazy-image.vue"
 	import {Toast, sucToast, checkphone, config} from '../../../../common/dialog.js'
 	
 	export default {
 		components: {
-			uSwiper,uniLoadMore
+			uSwiper,uniLoadMore,lazyImage
 		},
 		data() {
 			return {
+				placeholderSrc: "../../../../static/defaultImg.jpg",
 				loading: false,
 				loadingType: 1,
 				loadingFlag: false,
@@ -137,9 +140,11 @@
 	.uni-list-cell::after {
 		right: 30upx;
 	}
-	.uni-media-list-logo {
-		width: 240upx;
-		height: 160upx;
+	.uni-media-list-logo, .lazy-image {
+		width: 240upx !important;
+		height: 160upx !important;
+		flex: 0 0 240upx !important;
+		margin-right: 20upx;
 	}
 	.uni-media-list-body {
 		height: auto;

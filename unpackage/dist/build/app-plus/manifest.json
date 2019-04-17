@@ -5,7 +5,7 @@
     "iPad"
   ],
   "id": "__UNI__C4066C1",
-  "name": "jiangxia daily",
+  "name": "江夏日报",
   "version": {
     "name": "1.0.0",
     "code": "100"
@@ -17,16 +17,19 @@
     "email": "",
     "url": ""
   },
-  "permissions": {},
+  "permissions": {
+    "Share": {},
+    "Push": {},
+    "VideoPlayer": {}
+  },
   "plus": {
     "useragent": {
       "value": "uni-app appservice",
       "concatenate": true
     },
     "splashscreen": {
-      "target": "id:1",
-      "autoclose": true,
-      "waiting": true,
+      "autoclose": false,
+      "waiting": false,
       "delay": 0
     },
     "popGesture": "close",
@@ -39,6 +42,16 @@
       "background": "#3e5ffb"
     },
     "distribute": {
+      "icons": {
+        "android": {
+          "mdpi": "static/avatar.png",
+          "ldpi": "static/avatar.png",
+          "hdpi": "static/avatar.png",
+          "xhdpi": "static/avatar.png",
+          "xxhdpi": "static/avatar.png",
+          "xxxhdpi": "static/avatar.png"
+        }
+      },
       "google": {
         "permissions": [
           "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
@@ -82,7 +95,7 @@
       }
     },
     "uni-app": {
-      "compilerVersion": "1.8.2",
+      "compilerVersion": "1.9.1",
       "control": "webview"
     }
   }

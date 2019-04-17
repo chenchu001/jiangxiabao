@@ -59,6 +59,7 @@
 					},
 					success: res => {
 						uni.setStorageSync("nickname", this.nameValue)
+						this.$store.commit('changeName', true)
 						uni.navigateBack({
 							delta: 2,
 							url: '../index/index'

@@ -200,7 +200,7 @@
 							res = res.data
 							if (res.rescode === "0000") {
 								this.$store.commit('changePublish', true)
-								sucToast("评论成功")
+								sucToast("发表成功")
 								setTimeout(() => {
 									uni.switchTab({
 										url: '../../tabBar/love/love'

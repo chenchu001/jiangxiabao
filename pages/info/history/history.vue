@@ -4,7 +4,8 @@
 			<view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(item,index) in news" :key="index"
 				@tap="openInfo" :data-cateid="item.cateid" :data-id="item.artid" :data-catetype="item.catetype">
 				<view class="uni-media-list">
-					<image v-if="item.pic" class="uni-media-list-logo" :src="item.pic"></image>
+					<!-- <image v-if="item.pic" class="uni-media-list-logo" :src="item.pic"></image> -->
+					<lazy-image class="uni-media-list-logo" v-if="item.pic" :realSrc="item.pic" :placeholdSrc="placeholderSrc"></lazy-image>
 					<view class="uni-media-list-body">
 						<view class="uni-media-list-text-top">{{item.title}}</view>
 					</view>
@@ -21,14 +22,17 @@
 
 <script>
 	import uniLoadMore from '../../../components/uni-load-more.vue'
+	import lazyImage from "../../../components/lazy-image.vue"
 	import {Toast, sucToast, checkphone, config} from '../../../common/dialog.js'
 	
 	export default {
 		components: {
+			lazyImage,
 			uniLoadMore
 		},
 		data() {
 			return {
+				placeholderSrc: "../../../static/defaultImg.jpg",
 				loadingType: 1,
 				loadingFlag: false,
 				contentText: {
@@ -139,6 +143,12 @@
 	
 	page {
 		height: 100%;
+	}
+	.uni-media-list-logo, .lazy-image {
+		width: 240upx !important;
+		height: 160upx !important;
+		flex: 0 0 240upx !important;
+		margin-right: 20upx;
 	}
 	.history {
 		width: 100%;

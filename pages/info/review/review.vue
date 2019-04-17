@@ -11,7 +11,8 @@
 					<!-- 图片展示 -->
 					<view class="pic-wrap" v-if="item.artpics">
 						<view class="pic" v-for="(list, key) in item.artpics" :key="key">
-							<image :src="list" mode="aspectFill" @tap="previewImage(item.artpics, key)"></image>
+							<!-- <image :src="list" mode="aspectFill" @tap="previewImage(item.artpics, key)"></image> -->
+							<lazy-image mode="aspectFill" :realSrc="list" :placeholdSrc="placeholderSrc" @handleImageClick="previewImage(item.artpics, key)"></lazy-image>
 						</view>
 					</view>
 				</view>
@@ -30,14 +31,17 @@
 
 <script>
 	import uniLoadMore from '../../../components/uni-load-more.vue'
+	import lazyImage from "../../../components/lazy-image.vue"
 	import {Toast, sucToast, checkphone, config} from '../../../common/dialog.js'
 	
 	export default {
 		components: {
+			lazyImage,
 			uniLoadMore
 		},
 		data() {
 			return {
+				placeholderSrc: "../../../static/defaultImg.jpg",
 				loading: false,
 				loadingType: 1,
 				loadingFlag: false,

@@ -1,6 +1,7 @@
 {
   "usingComponents": {},
   "navigationBarTitleText": "每日江夏",
+  "enablePullDownRefresh": true,
   "bounce": "none",
   "titleNView": {
     "buttons": [

@@ -1,96 +1,190 @@
 <template>
-	<view class="beauty" v-if="loading">
-		<!-- content -->
-		<view class="wrap">
-			<view class="item">
-				<view class="list" v-for="(item, index) in list" :key="index" @tap="openDetail" :data-classifyid="item.catetype" :data-id="item.id">
-					<image :src="item.pic"></image>
-					<image src="../../../static/play-icon.png" class="play-icon" v-if="item.catetype == 3" ></image>
-					<view class="info">
-						<text class="left uni-ellipsis">{{item.title}}</text>
-						<text class="right">{{item.createtime ? item.createtime.split(" ")[0] : ""}}</text>
+	<view class="uni-tab-bar" v-if="loading">
+		<!-- title部分 -->
+		<scroll-view id="tab-bar" class="uni-swiper-tab">
+			<view v-for="(tab,index) in tabBars" :key="tab.id" :class="['swiper-tab-list',tabIndex==index ? 'active' : '']" :id="tab.id"
+			 :data-current="index" @click="tapTab(index)">{{tab.name}}</view>
+		</scroll-view>
+		<!-- 内容部分 -->
+		<swiper :current="tabIndex" class="swiper-box" duration="300" @change="changeTab">
+			<!-- 摄影 -->
+			<swiper-item>
+				<scroll-view class="list" scroll-y @scrolltolower="loadPicMore" @scroll="loadPicTop">
+					<view class="list-wrap" v-for="(item,index1) in picList" :key="index1" :data-id="item.id" :data-classifyid="item.catetype" @tap="openDetail">
+						<!-- <image :src="item.pic"></image> -->
+						<lazy-image :realSrc="item.pic" :placeholdSrc="placeholderSrc"></lazy-image>
+						<image src="../../../static/play-icon.png" class="play-icon" v-if="item.catetype == 3" ></image>
+						<view class="info">
+							<text class="left uni-ellipsis">{{item.title}}</text>
+						</view>
 					</view>
-				</view>
-				<uni-load-more v-if="loadingFlag" :loadingType="loadingType" :contentText="contentText"></uni-load-more>
-			</view>
-		</view>
-		<!-- 选择分类 -->
-		<mpvue-picker :themeColor="themeColor" ref="mpvuePicker" :mode="mode" :deepLength="deepLength" :pickerValueDefault="pickerValueDefault"
-		 @onConfirm="checkClassify" @onCancel="onCancel" :pickerValueArray="pickerValueArray"></mpvue-picker>
+					<uni-load-more v-if="loadingPicFlag" :loadingType="loadingPicType" :contentText="contentText"></uni-load-more>
+				</scroll-view>
+			</swiper-item>
+			<!-- 视频 -->
+			<swiper-item>
+				<scroll-view class="list" scroll-y @scrolltolower="loadVideoMore" @scroll="loadVideoTop">
+					<view class="list-wrap" v-for="(item,index2) in videoList" :key="index2" :data-id="item.id" :data-classifyid="item.catetype" @tap="openDetail">
+						<!-- <image :src="item.pic"></image> -->
+						<lazy-image :realSrc="item.pic" :placeholdSrc="placeholderSrc"></lazy-image>
+						<image src="../../../static/play-icon.png" class="play-icon" v-if="item.catetype == 3" ></image>
+						<view class="info">
+							<text class="left uni-ellipsis">{{item.title}}</text>
+						</view>
+					</view>
+					<uni-load-more v-if="loadingVideoFlag" :loadingType="loadingVideoType" :contentText="contentText"></uni-load-more>
+				</scroll-view>
+			</swiper-item>
+		</swiper>
 	</view>
 </template>
 
 <script>
 	import {Toast, sucToast, checkphone, config} from '../../../common/dialog.js'
-	import mpvuePicker from '../../../components/mpvue-picker/mpvuePicker.vue'
 	import uniLoadMore from '../../../components/uni-load-more.vue'
+	import lazyImage from "../../../components/lazy-image.vue"
 	
 	export default {
 		components: {
-			mpvuePicker,uniLoadMore
+			lazyImage,
+			uniLoadMore
 		},
 		data() {
 			return {
+				placeholderSrc: "../../../static/defaultImg.jpg",
+				tabBars: [{
+					name: '摄影',
+					id: 'sheying'
+				}, {
+					name: '视频',
+					id: 'shipin'
+				}],
+				winHeight: "",
+				tabIndex: 0,
+				scrollLeft: 0,
+				picList: [],
+				videoList: [],
 				loading: false,
-				loadingType: 1,
-				loadingFlag: true,
-				num: 1,
-				total: 0,
+				loadingPicType: 1,
+				loadingPicFlag: false,
+				picNum: 1,
+				picTotal: 0,
+				loadingVideoType: 1,
+				loadingVideoFlag: false,
+				videoNum: 1,
+				videoTotal: 0,
 				size: 10,
 				contentText: {
 					contentdown: "上拉显示更多",
 					contentrefresh: "正在加载...",
 					contentnomore: "没有更多数据了"
 				},
-				classifyVal: "",
-				themeColor: '#007AFF',
-				pickerValueArray: [],
-				mode: '',
-				deepLength: 1,
-				pickerValueDefault: [0],
-				list: [],
-				pickerSingleArray: [
-					{
-						label: '全部',
-						value: 3
-					},
-					{
-						label: '摄影',
-						value: 1
-					},
-					{
-						label: '视频',
-						value: 2
-					}
-				]
-			};
+				isSupport: true
+			}
 		},
 		methods: {
-			// 选择分类
-			checkClassify (event) {
-				uni.showTabBar()
-				this.setStyle(0,event.label)
-				uni.showLoading({
-					title: "加载中"
-				})
-				this.num = 1
-				this.total = 0
-				this.loadingType = 1
-				this.classifyVal = event.label
-				if (event.label === "摄影") {
-					this._getClassifyList(2)
-				} else if (event.label === "视频") {
-					this._getClassifyList(3)
+			tapTab (index) {
+				if (this.tabIndex === index) {
+					return false
 				} else {
-					this._getAllList()
+					this.tabIndex = index
+					if (this.tabIndex == 0) {
+						if (this.picList.length) {
+							return
+						}
+						this._getClassifyList(2)
+					} else {
+						if (this.videoList.length) {
+							return
+						}
+						uni.showLoading({
+							title: "加载中"
+						})
+						this._getClassifyList(3)
+					}
 				}
 			},
-			onCancel () {
-				uni.showTabBar()
+			changeTab (event) {
+				let index = event.detail.current
+				this.tabIndex = index
+				if (this.tabIndex == 0) {
+					if (this.picList.length) {
+						return
+					}
+					this._getClassifyList(2)
+				} else {
+					if (this.videoList.length) {
+						return
+					}
+					uni.showLoading({
+						title: "加载中"
+					})
+					this._getClassifyList(3)
+				}
 			},
+			// 摄影上拉加载
+			loadPicMore () {
+				if (this.loadingPicType == 2) {
+					return
+				}
+				this.picNum = this.picNum + 1
+				if ((this.picNum-1) * this.size <= this.picTotal) {
+					uni.request({
+						url: config.api_base_url + "articlelist",
+						data: {
+							p: this.picNum,
+							size: this.size,
+							cateid: 3,
+							catetype: 2
+						},
+						success: (res) => {
+							if (res.statusCode == 200) {
+								res = res.data
+								this.picList = this.picList.concat(res.data)
+								if (this.picList.length === this.picTotal) {
+									this.loadingPicType = 2
+								}
+							}
+						}
+					})
+				} else {
+				    this.loadingPicType = 2
+				}
+			},
+			// 视频下拉加载
+			loadVideoMore () {
+				if (this.loadingVideoType == 2) {
+					return
+				}
+				this.videoNum = this.videoNum + 1
+				if ((this.videoNum-1) * this.size <= this.videoTotal) {
+					uni.request({
+						url: config.api_base_url + "articlelist",
+						data: {
+							p: this.videoNum,
+							size: this.size,
+							cateid: 3,
+							catetype: 3
+						},
+						success: (res) => {
+							if (res.statusCode == 200) {
+								res = res.data
+								this.videoList = this.videoList.concat(res.data)
+								if (this.videoList.length === this.videoTotal) {
+									this.loadingVideoType = 2
+								}
+							}
+						}
+					})
+				} else {
+				    this.loadingPicType = 2
+				}
+			},
+			// 进入详情
 			openDetail (event) {
 				let classifyid = event.currentTarget.dataset.classifyid
 				let id = event.currentTarget.dataset.id
+				console.log(classifyid, id)
 				// 1为图片
 				if (classifyid == 2) {
 					uni.navigateTo({
@@ -102,48 +196,36 @@
 					})
 				}
 			},
-			/**
-			 * 修改导航栏buttons
-			 * index[number] 修改的buttons 下标索引，最右边索引为0
-			 * text[string] 需要修改的text 内容
-			 */
-			setStyle(index,text) {
-				let pages = getCurrentPages();
-				let page = pages[pages.length - 1];
-				// #ifdef APP-PLUS
-				let currentWebview = page.$getAppWebview();
-				let titleNView = currentWebview.getStyle().titleNView;
-				// 添加文字过长截取为3个字符，请根据自己业务需求更改
-				if(text.length > 3){
-					text = text.substr(0,3)+"..."
-				}
-				titleNView.buttons[0].text = text;
+			// #ifdef APP-PLUS
+			switchPullRefresh() {
+				const pages = getCurrentPages();
+				const page = pages[pages.length - 1];
+				const currentWebview = page.$getAppWebview();
 				currentWebview.setStyle({
-					titleNView:titleNView
-				});
-				// #endif
-			},
-			// 获取全部分类
-			_getAllList () {
-				this.list = []
-				uni.request({
-					url: config.api_base_url + "articlelist",
-					method: "GET",
-					data: {
-						cateid: 3
-					},
-					success: (res) => {
-						uni.hideLoading()
-						res = res.data
-						this.loading = true
-						this.total = Number(res.total)
-						this.loadingFlag = true
-						this.list = res.data
-						if (this.total <= 10) {
-							this.loadingType = 2
-						}
+					pullToRefresh: {
+						support: !this.isSupport,
+						style: plus.os.name === 'Android' ? 'circle' : 'default'
 					}
-				})
+				});
+			},
+			// #endif
+			loadPicTop (event) {
+				if (event.detail.scrollTop < 5) {
+					this.isSupport = false
+					this.switchPullRefresh()
+				} else {
+					this.isSupport = true
+					this.switchPullRefresh()
+				}
+			},
+			loadVideoTop (event) {
+				if (event.detail.scrollTop < 5) {
+					this.isSupport = false
+					this.switchPullRefresh()
+				} else {
+					this.isSupport = true
+					this.switchPullRefresh()
+				}
 			},
 			// 获取单项分类
 			_getClassifyList (value) {
@@ -157,111 +239,64 @@
 					},
 					success: (res) => {
 						res = res.data
-						this.list = res.data
-						uni.hideLoading()
-						this.total = Number(res.total)
-						this.loadingFlag = true
-						if (this.total <= 10) {
-							this.loadingType = 2
+						this.loading = true
+						if (value == 2) {
+							uni.hideLoading()
+							uni.stopPullDownRefresh()
+							this.loadingPicFlag = true
+							this.picTotal = Number(res.total)
+							this.picList = res.data
+							if (this.picTotal <= 10) {
+								this.loadingPicType = 2
+							}
+						} else {
+							uni.hideLoading()
+							uni.stopPullDownRefresh()
+							this.loadingVideoFlag = true
+							this.videoTotal = Number(res.total)
+							this.videoList = res.data
+							if (this.videoTotal <= 10) {
+								this.loadingVideoType = 2
+							}
 						}
 					}
 				})
 			}
 		},
-		onNavigationBarButtonTap(e) {
-			if (e.index === 0) {
-				uni.hideTabBar()
-				this.pickerValueArray = this.pickerSingleArray
-				this.mode = 'selector'
-				this.deepLength = 1
-				this.pickerValueDefault = [0]
-				this.$refs.mpvuePicker.show()
+		onLoad () {
+			uni.showLoading({
+				title: "加载中"
+			})
+			this._getClassifyList(2)
+		},
+		// 下拉刷新
+		onPullDownRefresh() {
+			if (this.tabIndex == 0) {
+				this.picList = []
+				this.picNum = 1
+				this.picTotal = 0
+				this.loadingPicType = 1
+				this._getClassifyList(2)
+			} else {
+				this.videoList = []
+				this.videoNum = 1
+				this.videoTotal = 0
+				this.loadingVideoType = 1
+				this._getClassifyList(3)
 			}
-			if (e.index === 1) {
+		},
+		// 导航栏跳转
+		onNavigationBarButtonTap(event) {
+			let index = event.index
+			if (index === 0) {
+				
+			}
+			if (index === 1) {
 				uni.navigateTo({
 					url: '../../info/index/index'
 				});
 			}
 		},
-		onReachBottom() {
-			if (this.loadingType == 2) {
-				return
-			}
-			if (this.classifyVal === "摄影") {
-				this.num = this.num + 1
-				if ((this.num-1) * this.size <= this.total) {
-					uni.request({
-						url: config.api_base_url + "articlelist" + '?p=' + this.num + '&size=' + this.size,
-						data: {
-							cateid: 3,
-							catetype: 2
-						},
-						success: (res) => {
-							if (res.statusCode == 200) {
-								res = res.data
-								this.list = this.list.concat(res.data)
-								if (this.list.length === this.total) {
-									this.loadingType = 2
-								}
-							}
-						}
-					})
-				} else {
-				    this.loadingType = 2
-				}
-			} else if (this.classifyVal === "视频") {
-				this.num = this.num + 1
-				if ((this.num-1) * this.size <= this.total) {
-					uni.request({
-						url: config.api_base_url + "articlelist" + '?p=' + this.num + '&size=' + this.size,
-						data: {
-							cateid: 3,
-							catetype: 3
-						},
-						success: (res) => {
-							if (res.statusCode == 200) {
-								res = res.data
-								this.list = this.list.concat(res.data)
-								if (this.list.length === this.total) {
-									this.loadingType = 2
-								}
-							}
-						}
-					})
-				} else {
-				    this.loadingType = 2
-				}
-			} else {
-				this.num = this.num + 1
-				if ((this.num-1) * this.size <= this.total) {
-					uni.request({
-						url: config.api_base_url + "articlelist" + '?p=' + this.num + '&size=' + this.size,
-						data: {
-							cateid: 3
-						},
-						success: (res) => {
-							if (res.statusCode == 200) {
-								res = res.data
-								this.list = this.list.concat(res.data)
-								if (this.list.length === this.total) {
-									this.loadingType = 2
-								}
-							}
-						}
-					})
-				} else {
-				    this.loadingType = 2
-				}
-			}
-			
-		},
-		onLoad () {
-			uni.showLoading({
-				title: "加载中"
-			})
-			this.classifyVal = "全部"
-			this._getAllList()
-		}
 	}
 </script>
 
@@ -272,17 +307,29 @@
 		width: 100%;
 		height: 100%;
 		background: #f5f5f5;
+		.list {
+			width: 100% !important;
+		}
+		.swiper-tab-list {
+			width: 50% !important
+		}
+		.active {
+			color: rgb(62, 95, 251)
+		}
 	}
-	.beauty {
-		box-sizing: bordder-box;
-		.wrap {
+	.uni-tab-bar {
+		width: 100%;
+		.swiper-box {
 			padding: 0 24upx;
-			overflow: hidden;
-			.item {
+			box-sizing: border-box;
+			width: 100%;
+			display: flex;
+			height: 100%;
+			swiper-item {
 				width: 100%;
-				display: flex;
-				flex-direction: column;
-				.list {
+				height: 100%;
+				overflow: hidden;
+				.list-wrap {
 					width: 100%;
 					margin-top: 20upx;
 					width: 100%;
