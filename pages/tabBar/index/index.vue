@@ -177,6 +177,9 @@
 		},
 		// 下拉刷新
 		onPullDownRefresh() {
+			this.num = 1
+			this.total = 0
+			this.loadingType = 1
 			this.listData = []
 			this.msg = []
 			this.imgUrls = []
